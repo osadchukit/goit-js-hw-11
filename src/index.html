@@ -4,11 +4,48 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Page title</title>
-    <link rel="stylesheet" href="./sass/index.scss" />
+    <!-- <link rel="stylesheet" href="./sass/index.scss" /> -->
+    <link rel="stylesheet" href="style.css">
     <script type="module" src="./index.js"></script>
   </head>
   <body>
+    <form class="search-form" id="search-form">
+      <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
+      <button type="submit">Search</button>
+    </form>
+
+    <div class="gallery">
+      <!-- Картки зображень -->
+      <!-- <div class="photo-card">
+        <img width="300px" src="" alt="" loading="lazy" />
+        <div class="info">
+          <p class="info-item">
+            <b>Likes</b>
+          </p>
+          <p class="info-item">
+            <b>Views</b>
+          </p>
+          <p class="info-item">
+            <b>Comments</b>
+          </p>
+          <p class="info-item">
+            <b>Downloads</b>
+          </p>
+        </div>
+      </div> -->
+          <!-- Картки зображень -->
+    </div>
+
+          
+    <button type="button" class="load-more">Load more</button>
+
     <!-- ❗️❗️❗️ Add partials like so for every page -->
+
+
+    <!-- <button type="button" class="btn">Fetch users</button>
+    <ul class="user-list"></ul> -->
+
+    
     <include src="./partials/example.html"></include>
   </body>
 </html>
