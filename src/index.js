@@ -1,8 +1,8 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import Notiflix from 'notiflix';
 
 const form = document.querySelector('#search-form');
-const submitRef = document.querySelector('.search-form button');
 const galleryRef = document.querySelector('.gallery');
 
 form.addEventListener('submit', onSearch);
@@ -15,105 +15,76 @@ function onSearch(event) {
       .catch(err => console.log(err));
 }
 
-function pixelApi(searchQuery) {
-  const BASE_URL = 'https://pixabay.com/api';
+async function pixelApi(searchQuery) {
+    const BASE_URL = 'https://pixabay.com/api';
     const key = '32829477-2f7edc8ed39a847f6da0b1679';
-    return fetch(`${BASE_URL}/?key=${key}&q=${searchQuery}`)
-        .then(resp => {
-            // console.log(resp)
-            if (!resp.ok) {
-            throw new Error(resp.statusText)
-            }
-            
-            return resp.json()
-        })
+    const per_page = 40;
+    const image_type = 'photo';
+    const orientation = 'horizontal';
+    const safesearch = true;
+
+    const resp = await fetch(
+        `${BASE_URL}/?key=${key}&q=${searchQuery}&per_page=${per_page}&image_type=${image_type}&orientation=${orientation}&safesearch=${safesearch}`
+    );
+    if (!resp.ok) {
+        throw new Error(resp.statusText);
+    }
+    return await resp.json();
 }
 
-function createMarkup(obj) {
-    console.log(obj);
+function createMarkup({ hits }) {
+    galleryRef.innerHTML = '';
+  console.log(hits);
+  if (form[0].value === '') {
+    Notiflix.Notify.info(
+      'Введіть слово.'
+    );
+    return;
+  } else if (hits.length === 0) {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+      return;
+    }
+
+  const markup = hits.map(
+    ({
+      webformatURL,
+      largeImageURL,
+      tags,
+      likes,
+      views,
+      comments,
+      downloads,
+    }) => `<div class="photo-card">
+        <a class="gallery__item" href="${webformatURL}">
+            <img class="item" src="${largeImageURL}" alt="${tags}" loading="lazy" />
+        </a>
+        <div class="info">
+          <p class="info-item">
+            <b>Likes:</b> ${likes}
+          </p>
+          <p class="info-item">
+            <b>Views:</b> ${views}
+          </p>
+          <p class="info-item">
+            <b>Comments:</b> ${comments}
+          </p>
+          <p class="info-item">
+            <b>Downloads:</b> ${downloads}
+          </p>
+        </div>
+      </div>
+      `
+  );
+
+  galleryRef.innerHTML = markup.join('');
 }
 
-    //   <div class="photo-card">
-    //     <img width="300px" src="" alt="" loading="lazy" />
-    //     <div class="info">
-    //       <p class="info-item">
-    //         <b>Likes</b>
-    //       </p>
-    //       <p class="info-item">
-    //         <b>Views</b>
-    //       </p>
-    //       <p class="info-item">
-    //         <b>Comments</b>
-    //       </p>
-    //       <p class="info-item">
-    //         <b>Downloads</b>
-    //       </p>
-    //     </div>
-    //   </div>;
 
-
-
-
-
-
-
-// 
-// const fetchUsersBtn = document.querySelector('.btn');
-// const userList = document.querySelector('.user-list');
-
-// fetchUsersBtn.addEventListener('click', async () => {
-//   try {
-//       const users = await
-//         fetchUsers();
-//         renderUserListItems(users);
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// });
-
-// async function fetchUsers() {
-//   const baseUrl =
-//     'https://pixabay.com/api/?key=32829477-2f7edc8ed39a847f6da0b1679&q=yellow+flowers&image_type=photo&orientation=horizontal&safesearch=true&per_page=40';
-// //   const userIds = [1, 2, 3, 4, 5];
-
-//   const arrayOfPromises = userIds.map(async userId => {
-//     const response = await fetch(`${baseUrl}`);
-//     return response.json();
-//   });
-
-//   const users = await Promise.all(arrayOfPromises);
-//   return users;
-// }
-
-// function renderUserListItems(users) {
-//   const markup = users
-//     .map(
-//       user => `<li class="item">
-//         <p><b>Name</b>: ${user.name}</p>
-//         <p><b>Email</b>: ${user.email}</p>
-//         <p><b>Company</b>: ${user.company.name}</p>
-//       </li>`
-//     )
-//     .join('');
-//   userList.innerHTML = markup;
-// }
-
-
-
-    //   <div class="photo-card">
-    //     <img width="300px" src="" alt="" loading="lazy" />
-    //     <div class="info">
-    //       <p class="info-item">
-    //         <b>Likes</b>
-    //       </p>
-    //       <p class="info-item">
-    //         <b>Views</b>
-    //       </p>
-    //       <p class="info-item">
-    //         <b>Comments</b>
-    //       </p>
-    //       <p class="info-item">
-    //         <b>Downloads</b>
-    //       </p>
-    //     </div>
-    //   </div>;
+new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  scrollZoom: true,
+  scrollZoomFactor: 0.5,
+});
