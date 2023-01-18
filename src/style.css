@@ -1,3 +1,7 @@
+body {
+margin: 0;
+}
+
 .search-form {
     display: flex;
     gap: 10px;
@@ -9,7 +13,7 @@
 .gallery {
     display: flex;
     gap: 10px;
-    margin-top: 10px;
+    margin: 10px;
     justify-content: center;
     flex-wrap: wrap;
 }
@@ -32,8 +36,8 @@
 }
 
 .info-item {
-font-size: 14px;
-text-align: center;
+    font-size: 14px;
+    text-align: center;
 }
 
 .gallery__item {
@@ -45,3 +49,73 @@ text-align: center;
 .gallery__image:hover {
     transform: scale(1.03);
 }
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.box-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.load-more{}
+
+
+/* --------------------------- */
+/* 
+body {
+    margin: 16px;
+    line-height: 1.5;
+    color: #212121;
+    font-family: sans-serif;
+}
+
+p {
+    margin: 0;
+}
+
+.posts {
+    margin: 0;
+    list-style: none;
+    margin-bottom: 16px;
+}
+
+.posts li:not(:last-child) {
+    margin-bottom: 16px;
+}
+
+.post-title {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.post-title:first-letter {
+    text-transform: uppercase;
+}
+
+.post-body {
+    margin: 0;
+}
+
+.alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 8px;
+    text-align: center;
+    background-color: tomato;
+    color: #fff;
+    transform: translatey(-100%);
+    transition: transform 250ms ease-in-out;
+}
+
+.alert.is-visible {
+    transform: translatey(0);
+} */
