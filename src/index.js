@@ -15,7 +15,6 @@ loadMore.disabled = true;
 
 function onSearch(event) {
   event.preventDefault();
-
   newApiService.query = event.currentTarget.searchQuery.value;
   newApiService.resetPage();
   newApiService.fetchArticles().then(hits => createMarkup(hits));
