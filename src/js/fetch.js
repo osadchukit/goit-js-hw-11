@@ -11,16 +11,13 @@ export default class NewApiService {
     this.page = 1;
   }
 
-  fetchArticles() {
-    return fetch(
-      `${BASE_URL}/?key=${key}&q=${this.searchQuery}&per_page=${per_page}&image_type=${image_type}&orientation=${orientation}&safesearch=${safesearch}&page=${this.page}`
-    )
-      .then(res => res.json())
-      .then(({hits}) => {
-        this.incrementPage();
-
-        return hits;
-      });
+  async fetchArticles() {
+    const res = await fetch(
+          `${BASE_URL}/?key=${key}&q=${this.searchQuery}&per_page=${per_page}&image_type=${image_type}&orientation=${orientation}&safesearch=${safesearch}&page=${this.page}`
+      );
+      const { hits } = await res.json();
+      this.incrementPage();
+      return hits;
   }
 
     
