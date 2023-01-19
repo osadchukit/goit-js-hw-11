@@ -11,14 +11,16 @@ const newApiService = new NewApiService();
 
 form.addEventListener('submit', onSearch);
 loadMore.addEventListener('click', loadMoreBtn)
-loadMore.disabled = true;
+loadMore.classList.add('visually-hidden');
 
 function onSearch(event) {
   event.preventDefault();
+  
   newApiService.query = event.currentTarget.searchQuery.value;
   newApiService.resetPage();
   newApiService.fetchArticles().then(hits => createMarkup(hits));
   galleryRef.innerHTML = '';
+  
 }
 
 function loadMoreBtn() {
@@ -26,16 +28,32 @@ function loadMoreBtn() {
 }
 
 function createMarkup(hits) {
+  console.log(hits);
+  console.dir(form.searchQuery.value);
+  console.dir(loadMore.currentTarget);
+  
   if (form.searchQuery.value === '') {
+    loadMore.classList.add('visually-hidden');
     Notiflix.Notify.info('Введіть слово.');
     return;
-  } else if (hits.length === 0) {
-    loadMore.disabled = true;
+  } else if (
+    form.searchQuery.value !== '' &&
+    hits.length === 0 &&
+    loadMore.currentTarget !== true
+  ) {
+    loadMore.classList.add('visually-hidden');
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
     return;
-  }
+  } else if (hits.length === 0) {
+    loadMore.classList.add('visually-hidden');
+    Notiflix.Notify.failure(
+      `We're sorry, but you've reached the end of search results.`
+    );
+    return;
+  } 
+  
 
   const markup = hits
     .map(
@@ -72,7 +90,7 @@ function createMarkup(hits) {
 
   galleryRef.insertAdjacentHTML('beforeend', markup);
 
-  new SimpleLightbox('.gallery a', {});
+  new SimpleLightbox('.gallery a', {}).refresh();
 
-  loadMore.disabled = false;
+  loadMore.classList.remove('visually-hidden');
 }
