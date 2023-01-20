@@ -15,11 +15,12 @@ export default class NewApiService {
     const res = await fetch(
           `${BASE_URL}/?key=${key}&q=${this.searchQuery}&per_page=${per_page}&image_type=${image_type}&orientation=${orientation}&safesearch=${safesearch}&page=${this.page}`
       );
-      const { hits } = await res.json();
+      const obj = await res.json();
       this.incrementPage();
-      return hits;
+      return obj;
   }
 
+    
     
   incrementPage() {
     this.page += 1;
@@ -35,7 +36,9 @@ export default class NewApiService {
 
   set query(newQuery) {
     this.searchQuery = newQuery;
-  }
+    }
+    
+    
 }
 
 // export async function pixelApi(searchQuery) {

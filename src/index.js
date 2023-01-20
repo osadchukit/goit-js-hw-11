@@ -11,7 +11,6 @@ const newApiService = new NewApiService();
 
 form.addEventListener('submit', onSearch);
 loadMore.addEventListener('click', loadMoreBtn)
-loadMore.classList.add('visually-hidden');
 
 function onSearch(event) {
   event.preventDefault();
@@ -24,38 +23,34 @@ function onSearch(event) {
 }
 
 function loadMoreBtn() {
-  newApiService.fetchArticles().then(hits => createMarkup(hits));
+
+newApiService.fetchArticles().then(hits => createMarkup(hits));
 }
 
-function createMarkup(hits) {
-  console.log(hits);
-  console.dir(form.searchQuery.value);
-  console.dir(loadMore.currentTarget);
-  
-  if (form.searchQuery.value === '') {
+function createMarkup(obj) {
+  console.dir(obj);
+  let inputValue = form.searchQuery.value;
+
+
+
+  if (inputValue === '') {
     loadMore.classList.add('visually-hidden');
     Notiflix.Notify.info('Введіть слово.');
     return;
-  } else if (
-    form.searchQuery.value !== '' &&
-    hits.length === 0 &&
-    loadMore.currentTarget !== true
-  ) {
-    loadMore.classList.add('visually-hidden');
-    Notiflix.Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
-    return;
-  } else if (hits.length === 0) {
+  } else if (inputValue !== '' && obj.hits.length === 0 && obj.total !== 0) {
     loadMore.classList.add('visually-hidden');
     Notiflix.Notify.failure(
       `We're sorry, but you've reached the end of search results.`
     );
     return;
-  } 
-  
+  } else if (obj.hits.length === 0) {
+    loadMore.classList.add('visually-hidden');
+    Notiflix.Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+  }
 
-  const markup = hits
+  const markup = obj.hits
     .map(
       ({
         webformatURL,
@@ -92,5 +87,9 @@ function createMarkup(hits) {
 
   new SimpleLightbox('.gallery a', {}).refresh();
 
+if (obj.total > 40) {
   loadMore.classList.remove('visually-hidden');
 }
+}
+
+
